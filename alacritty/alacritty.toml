@@ -1,0 +1,39 @@
+import = ["/home/ss/.config/alacritty/themes/themes/gruvbox_dark.toml"]
+
+[env]
+TERM = "xterm-256color"
+WINIT_HIDPI_FACTOR = "1"
+WINIT_X11_SCALE_FACTOR = "1"
+
+[font]
+# draw_bold_text_with_bright_colors = true
+# size = 9.5
+size = 10
+
+[font.bold]
+family = "Roboto Mono"
+style = "Bold"
+
+[font.italic]
+family = "Roboto Mono"
+style = "Medium Italic"
+
+[font.bold_italic]
+family = "Roboto Mono"
+style = "Bold Italic"
+
+[font.normal]
+family = "Roboto Mono"
+style = "Medium"
+
+#[shell]
+#args = ["-l", "-c", "tmux"]
+#program = "/bin/zsh"
+
+[window.dimensions]
+columns = 100
+lines = 24
+
+[window.padding]
+x = 4
+y = 4
