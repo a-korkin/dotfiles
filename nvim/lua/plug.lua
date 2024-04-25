@@ -28,7 +28,7 @@ require("packer").startup(function(use)
     use({
         "nvim-lualine/lualine.nvim",
     })
-    
+
     use("nvim-tree/nvim-tree.lua")
 
     use({
@@ -54,6 +54,9 @@ require("packer").startup(function(use)
             -- Autocompletion
             {"hrsh7th/nvim-cmp"},
             {"hrsh7th/cmp-nvim-lsp"},
+            -- {"ms-jpq/coq_nvim", branch = "coq"},
+            -- {"ms-jpq/coq.artifacts", branch = "artifacts"},
+            -- {"ms-jpq/coq.thirdparty", branch = "3p"},
             {"L3MON4D3/LuaSnip"},
     	}
     }
@@ -83,6 +86,11 @@ require("packer").startup(function(use)
 
     use("nvim-treesitter/nvim-treesitter")
     use("windwp/nvim-ts-autotag")
+    use({"onsails/lspkind-nvim", config=function()
+            require("plugins/lspkind")
+
+        end
+    })
 end)
 
 -- the first run will install packer and our plugins

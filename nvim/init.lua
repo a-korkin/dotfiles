@@ -21,21 +21,6 @@ require("plug")
 
 require("nvim-autopairs").setup()
 
--- Theme
--- require("catppuccin").setup({
---     flavour = "mocha",
---     no_italic = true,
--- })
--- vim.cmd [[colorscheme catppuccin]]
-
--- require("tokyonight").setup({
---     style = "storm",
--- })
--- vim.cmd[[colorscheme tokyonight]]
-
--- require("vscode").setup({})
--- vim.cmd[[colorscheme vscode]]
-
 require("gruvbox").setup({
     italic = {
         strings = false,
@@ -59,8 +44,6 @@ require("lualine").setup {
     },
 }
 require("Comment").setup()
--- require("nvim-tree").setup()
--- require("nerdtree").setup()
 
 -- LSP
 local lsp = require("lsp-zero")
@@ -73,6 +56,7 @@ lsp.setup_servers({
     "tsserver",
     "eslint",
 })
+
 -- mason
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -86,30 +70,14 @@ lspconfig.emmet_language_server.setup({
     filetypes = { 'xml' },
 })
 
--- require'nvim-treesitter.configs'.setup {
---     autotag = {
---         enable = true,
---     }
--- }
-
--- Python
--- require("dressing").setup({})
--- require("swenv.api").pick_venv()
-
 require("nvim-ts-autotag").setup({
     filetypes = { "html", "xml" },
 })
 
--- Arduino
--- require("arduino").setup ({
---     default_fqbn = "arduino:avr:uno",
---     clangd = require 'mason-core.path'.bin_prefix 'clangd',
---     arduino = "/usr/bin/arduino-cli",
--- })
-
 local cmp = require("cmp")
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
--- local cmp_action = lsp.cmp_action()
+local cmp_insert = {behavior = cmp.SelectBehavior.Insert}
+local lspkind = require("lspkind")
 
 cmp.setup({
     window = {
@@ -118,14 +86,29 @@ cmp.setup({
     },
     mapping = cmp.mapping.preset.insert({
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-k>'] = cmp.mapping.scroll_docs(-3),
+        ['<C-k>'] = cmp.mapping.scroll_docs(-4),
         ['<C-l>'] = cmp.mapping.scroll_docs(4),
-        ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-        ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-        ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+        -- ["<C-p>"] = cmp.mapping.select_prev_item(cmp_insert),
+        -- ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+        -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
+        ["<S-Tab>"] = cmp.mapping.select_prev_item(cmp_select),
+        ["<Tab>"] = cmp.mapping.select_next_item(cmp_select),
         ["<CR>"] = cmp.mapping.confirm({ select = true }),
-    })
+    }),
+    formatting = {
+        format = lspkind.cmp_format({
+            mode = "text_symbol",
+            maxwidth = 50,
+        })
+    }
 })
+
+-- cmp.setup.cmdline({
+--     mapping = cmp.mapping.preset.cmdline({
+--         ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+--         ["<C-y>"] = cmp.mapping.select_next_item(cmp_select),
+--     })
+-- })
 
 lsp.set_preferences({
     sign_icons = { }
@@ -135,7 +118,8 @@ lsp.on_attach(function(client, bufnr)
     local opts = {buffer = bufnr, remap = false}
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts) vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
 end)
 
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
@@ -171,7 +155,7 @@ require("nvim-tree").setup({
         dotfiles = false,
         exclude = { ".conf", ".config", ".local" },
     },
-}) 
+})
 vim.keymap.set("n", "<leader>b", ":NvimTreeToggle<CR>", {})
 vim.keymap.set("n", "<leader>e", ":NvimTreeFocus<CR>", {})
 
@@ -184,7 +168,7 @@ require('langmapper').automapping({ global = true, buffer = true })
 local function escape(str)
     -- You need to escape these characters to work correctly
     local escape_chars = [[;,."|\]]
-    return vim.fn.escape(str, escape_chars) 
+    return vim.fn.escape(str, escape_chars)
 end
 
 -- Recommended to use lua template string
