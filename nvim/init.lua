@@ -17,33 +17,86 @@ vim.opt.smartcase = true
 
 vim.g.mapleader = " "
 
+vim.o.autoread = true
+vim.api.nvim_create_autocmd(
+    { "BufEnter", "CursorHold", "CursorHoldI", "FocusGained", },
+    {
+        command = "if mode() != 'c' | checktime | endif",
+        pattern = {"*"},
+    }
+)
+
 require("plug")
 
 require("nvim-autopairs").setup()
 
-require("gruvbox").setup({
-    italic = {
-        strings = false,
-        emphasis = false,
-        comments = false,
-        operators = false,
-        folds = false,
+-- Theme
+require("catppuccin").setup({
+    flavour = "auto", -- latte, frappe, macchiato, mocha
+    background = { -- :h background
+        light = "latte",
+        dark = "mocha",
     },
-    contrast = "", -- hard, soft
+    transparent_background = false, -- disables setting the background color.
+    show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
+    term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+    dim_inactive = {
+        enabled = false, -- dims the background color of inactive window
+        shade = "dark",
+        percentage = 0.15, -- percentage of the shade to apply to the inactive window
+    },
+    no_italic = true, -- Force no italic
+    no_bold = false, -- Force no bold
+    no_underline = false, -- Force no underline
+    styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+        comments = { "italic" }, -- Change the style of comments
+        conditionals = {}, --{ "italic" },
+        loops = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = {},
+        properties = {},
+        types = {},
+        operators = {},
+        -- miscs = {}, -- Uncomment to turn off hard-coded styles
+    },
+    color_overrides = {},
+    custom_highlights = {},
+    default_integrations = true,
+    integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        treesitter = true,
+        notify = false,
+        mini = {
+            enabled = true,
+            indentscope_color = "",
+        },
+        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+    },
 })
+
 vim.o.background = "dark"
-vim.cmd[[colorscheme gruvbox]]
+vim.cmd("colorscheme catppuccin-mocha")
 
 require("lualine").setup {
     options = {
         icons_enabled = true,
         component_separators = { left = '|', right = '|' },
         section_separators = { left = '', right = '' },
-        -- theme = "catppuccin",
-        theme = "gruvbox",
+        theme = "catppuccin",
+        -- theme = "gruvbox",
+        -- theme = "tokyonight",
+        -- theme = "kanagawa",
     },
 }
 require("Comment").setup()
+-- require("nvim-tree").setup()
+-- require("nerdtree").setup()
 
 -- LSP
 local lsp = require("lsp-zero")
@@ -53,10 +106,10 @@ lsp.setup_servers({
     "pyright",
     "clangd",
     "taplo",
-    "tsserver",
+    "ts_ls",
     "eslint",
+    "gopls",
 })
-
 -- mason
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -70,13 +123,23 @@ lspconfig.emmet_language_server.setup({
     filetypes = { 'xml' },
 })
 
+-- require'nvim-treesitter.configs'.setup {
+--     autotag = {
+--         enable = true,
+--     }
+-- }
+
+-- Python
+-- require("dressing").setup({})
+-- require("swenv.api").pick_venv()
+
 require("nvim-ts-autotag").setup({
     filetypes = { "html", "xml" },
 })
 
+
 local cmp = require("cmp")
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_insert = {behavior = cmp.SelectBehavior.Insert}
 local lspkind = require("lspkind")
 
 cmp.setup({
@@ -86,11 +149,8 @@ cmp.setup({
     },
     mapping = cmp.mapping.preset.insert({
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-k>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-k>'] = cmp.mapping.scroll_docs(-3),
         ['<C-l>'] = cmp.mapping.scroll_docs(4),
-        -- ["<C-p>"] = cmp.mapping.select_prev_item(cmp_insert),
-        -- ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-        -- ["<Tab>"] = cmp.mapping.confirm({ select = true }),
         ["<S-Tab>"] = cmp.mapping.select_prev_item(cmp_select),
         ["<Tab>"] = cmp.mapping.select_next_item(cmp_select),
         ["<CR>"] = cmp.mapping.confirm({ select = true }),
@@ -98,28 +158,23 @@ cmp.setup({
     formatting = {
         format = lspkind.cmp_format({
             mode = "symbol_text",
-            maxwidth = 50,
+            maxwidth = {
+                menu = 50,
+                abbr = 50,
+            },
         })
     }
 })
-
--- cmp.setup.cmdline({
---     mapping = cmp.mapping.preset.cmdline({
---         ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
---         ["<C-y>"] = cmp.mapping.select_next_item(cmp_select),
---     })
--- })
 
 lsp.set_preferences({
     sign_icons = { }
 })
 
-lsp.on_attach(function(client, bufnr)
+lsp.on_attach(function(_, bufnr)
     local opts = {buffer = bufnr, remap = false}
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts) vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
 end)
 
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
@@ -168,7 +223,7 @@ require('langmapper').automapping({ global = true, buffer = true })
 local function escape(str)
     -- You need to escape these characters to work correctly
     local escape_chars = [[;,."|\]]
-    return vim.fn.escape(str, escape_chars)
+    return vim.fn.escape(str, escape_chars) 
 end
 
 -- Recommended to use lua template string
@@ -183,4 +238,15 @@ vim.opt.langmap = vim.fn.join({
     escape(ru_shift) .. ';' .. escape(en_shift),
     escape(ru) .. ';' .. escape(en),
 }, ',')
+
+-- gofmt
+require("go").setup()
+local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*.go",
+    callback = function()
+        require("go.format").gofmt()
+    end,
+    group = format_sync_grp,
+})
 

@@ -24,6 +24,8 @@ require("packer").startup(function(use)
     use{"catppuccin/nvim", as = "catppuccin"}
     use("folke/tokyonight.nvim")
     use("Mofiqul/vscode.nvim")
+    use("dasupradyumna/midnight.nvim")
+    use("rebelot/kanagawa.nvim")
 
     use({
         "nvim-lualine/lualine.nvim",
@@ -86,11 +88,13 @@ require("packer").startup(function(use)
 
     use("nvim-treesitter/nvim-treesitter")
     use("windwp/nvim-ts-autotag")
-    use({"onsails/lspkind-nvim", config=function()
-            require("plugins/lspkind")
-
-        end
-    })
+    -- use({"onsails/lspkind-nvim",
+    --     config=function()
+    --         require("plugins/lspkind")
+    --     end
+    -- })
+    use("onsails/lspkind-nvim")
+    use("ray-x/go.nvim")
 end)
 
 -- the first run will install packer and our plugins
