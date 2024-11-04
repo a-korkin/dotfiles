@@ -19,4 +19,26 @@ rofi/
 user-dirs.dirs
 user-dirs.locale
 xed/
-
+Code/
+GIMP/
+QtProject.conf
+Raspberry Pi/
+cinnamon-monitors.xml
+freerdp/
+go/
+gtk-2.0/
+kactivitymanagerdrc
+kconf_updaterc
+kdeconnect/
+kdeglobals
+kglobalshortcutsrc
+mimeapps.list
+mozilla/
+nvm/
+okularpartrc
+okularrc
+qBittorrent/
+remmina/
+rest-client/
+session/
+transmission/
