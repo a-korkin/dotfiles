@@ -1,8 +1,8 @@
-vim.opt.smarttab = true
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
+vim.opt.smarttab = true
 vim.g.termiguicolors = true
 vim.wo.number = true
 vim.opt.scrolloff = 10
@@ -13,6 +13,7 @@ vim.opt.swapfile = true
 vim.opt.guicursor = ""
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.clipboard = "unnamedplus"
 -- vim.opt.signcolumn = "yes:1"
 
 vim.g.mapleader = " "
@@ -172,10 +173,15 @@ lsp.set_preferences({
 
 lsp.on_attach(function(_, bufnr)
     local opts = {buffer = bufnr, remap = false}
+    local bufopts = {noremap = true, silent = true, buffer = bufnr}
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts) vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "<Space>e", vim.diagnostic.open_float, bufopts)
 end)
+
+vim.diagnostic.open_float()
 
 lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
