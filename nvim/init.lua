@@ -83,6 +83,8 @@ require("catppuccin").setup({
 
 vim.o.background = "dark"
 vim.cmd("colorscheme catppuccin-mocha")
+-- vim.o.background = "light"
+-- vim.cmd("colorscheme catppuccin-latte")
 
 require("lualine").setup {
     options = {
@@ -179,6 +181,7 @@ lsp.on_attach(function(_, bufnr)
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
     vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
     vim.keymap.set("n", "<Space>e", vim.diagnostic.open_float, bufopts)
+    vim.keymap.set("i", "jj", "<ESC>", {silent = true})
 end)
 
 vim.diagnostic.open_float()
@@ -254,5 +257,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         require("go.format").gofmt()
     end,
     group = format_sync_grp,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = "*.rs",
+    command = "RustFmt",
 })
 

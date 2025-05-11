@@ -95,6 +95,14 @@ require("packer").startup(function(use)
     -- })
     use("onsails/lspkind-nvim")
     use("ray-x/go.nvim")
+
+    -- use({
+    --     "kylechui/nvim-surround",
+    --     tag = "*",
+    --     config = function()
+    --         require("nvim-surround").setup({})
+    --     end
+    -- })
 end)
 
 -- the first run will install packer and our plugins

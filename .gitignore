@@ -44,3 +44,6 @@ session/
 transmission/
 kitty/kitty-themes/
 kitty/kitty-themes/*
+kitty/latte.conf
+flameshot/
+lazygit/
