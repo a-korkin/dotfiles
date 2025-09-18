@@ -217,11 +217,18 @@ require("nvim-tree").setup({
     },
     filters = {
         dotfiles = false,
-        exclude = { ".conf", ".config", ".local" },
+        git_clean = false,
+        no_buffer = false,
+        custom = {},
+        exclude = {},
+    },
+    git = {
+        enable = true,
+        ignore = false,
     },
 })
-vim.keymap.set("n", "<leader>b", ":NvimTreeToggle<CR>", {})
-vim.keymap.set("n", "<leader>e", ":NvimTreeFocus<CR>", {})
+vim.keymap.set("n", "<leader>b", ":NvimTreeFindFileToggle<CR>", {})
+-- vim.keymap.set("n", "<leader>e", ":NvimTreeFocus<CR>", {})
 
 -- LangMapper
 require('langmapper').automapping({ global = true, buffer = true })
