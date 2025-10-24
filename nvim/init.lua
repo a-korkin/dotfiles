@@ -1,28 +1,31 @@
 vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using
-        -- (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {
-          'vim',
-          'require'
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using
+                -- (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {
+                    'vim',
+                    'require'
+                },
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+            format = {
+                enable = true,
+            },
         },
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
     },
-  },
 })
 
 vim.opt.expandtab = true
@@ -50,7 +53,7 @@ vim.api.nvim_create_autocmd(
     { "BufEnter", "CursorHold", "CursorHoldI", "FocusGained", },
     {
         command = "if mode() != 'c' | checktime | endif",
-        pattern = {"*"},
+        pattern = { "*" },
     }
 )
 
@@ -64,24 +67,24 @@ require("nvim-surround").setup()
 -- Theme
 require("catppuccin").setup({
     flavour = "auto", -- latte, frappe, macchiato, mocha
-    background = { -- :h background
+    background = {    -- :h background
         light = "latte",
         dark = "mocha",
     },
     transparent_background = false, -- disables setting the background color.
-    show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-    term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+    show_end_of_buffer = false,     -- shows the '~' characters after the end of buffers
+    term_colors = false,            -- sets terminal colors (e.g. `g:terminal_color_0`)
     dim_inactive = {
-        enabled = false, -- dims the background color of inactive window
+        enabled = false,            -- dims the background color of inactive window
         shade = "dark",
-        percentage = 0.15, -- percentage of the shade to apply to the inactive window
+        percentage = 0.15,          -- percentage of the shade to apply to the inactive window
     },
-    no_italic = true, -- Force no italic
-    no_bold = false, -- Force no bold
-    no_underline = false, -- Force no underline
-    styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-        comments = { "italic" }, -- Change the style of comments
-        conditionals = {}, --{ "italic" },
+    no_italic = true,               -- Force no italic
+    no_bold = false,                -- Force no bold
+    no_underline = false,           -- Force no underline
+    styles = {                      -- Handles the styles of general hi groups (see `:h highlight-args`):
+        comments = { "italic" },    -- Change the style of comments
+        conditionals = {},          --{ "italic" },
         loops = {},
         functions = {},
         keywords = {},
@@ -119,28 +122,14 @@ require("lualine").setup {
         icons_enabled = true,
         component_separators = { left = '|', right = '|' },
         section_separators = { left = '', right = '' },
-        theme = "catppuccin",
-        -- theme = "gruvbox",
-        -- theme = "tokyonight",
-        -- theme = "kanagawa",
+        theme = "catppuccin", --gruvbox,tokyonight,kanagawa
     },
 }
 require("Comment").setup()
--- require("nvim-tree").setup()
--- require("nerdtree").setup()
 
 -- LSP
 local lsp = require("lsp-zero")
 lsp.preset("recommended")
--- lsp.setup_servers({
---     "rust_analyzer",
---     "pyright",
---     "clangd",
---     "taplo",
---     "ts_ls",
---     "eslint",
---     "gopls",
--- })
 vim.lsp.enable({
     "rust_analyzer",
     "pyright",
@@ -160,24 +149,9 @@ require("mason-lspconfig").setup({
     },
 })
 
--- local lspconfig = require("lspconfig");
--- lspconfig.emmet_language_server.setup({
---     filetypes = { 'xml' },
--- })
-
 vim.lsp.config("emmet_language_server", {
     filetypes = { 'xml' }
 })
-
--- require'nvim-treesitter.configs'.setup {
---     autotag = {
---         enable = true,
---     }
--- }
-
--- Python
--- require("dressing").setup({})
--- require("swenv.api").pick_venv()
 
 require("nvim-ts-autotag").setup({
     filetypes = { "html", "xml" },
@@ -185,7 +159,7 @@ require("nvim-ts-autotag").setup({
 
 
 local cmp = require("cmp")
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local lspkind = require("lspkind")
 
 cmp.setup({
@@ -213,12 +187,12 @@ cmp.setup({
 })
 
 lsp.set_preferences({
-    sign_icons = { }
+    sign_icons = {}
 })
 
 lsp.on_attach(function(_, bufnr)
-    local opts = {buffer = bufnr, remap = false}
-    local bufopts = {noremap = true, silent = true, buffer = bufnr}
+    local opts = { buffer = bufnr, remap = false }
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
     vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
@@ -228,8 +202,6 @@ lsp.on_attach(function(_, bufnr)
 end)
 
 vim.diagnostic.open_float()
-
--- lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 
 -- Rust tools
@@ -253,14 +225,6 @@ vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 
--- require("telescope").setup({
---     defaults = {
---         layout_config = {
---             vertical = { width = 0.9 },
---         },
---     },
--- })
-
 -- NvimTree
 require("nvim-tree").setup({
     view = {
@@ -279,19 +243,15 @@ require("nvim-tree").setup({
         ignore = false,
     },
 })
--- vim.keymap.set("n", "<leader>b", ":NvimTreeToggle<CR>", {})
 vim.keymap.set("n", "<leader>b", ":NvimTreeFindFileToggle<CR>", {})
 
 -- LangMapper
 require('langmapper').automapping({ global = true, buffer = true })
 
--- html
--- require('html-css').setup({})
-
 local function escape(str)
     -- You need to escape these characters to work correctly
     local escape_chars = [[;,."|\]]
-    return vim.fn.escape(str, escape_chars) 
+    return vim.fn.escape(str, escape_chars)
 end
 
 -- Recommended to use lua template string
@@ -326,3 +286,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = augroup,
+    pattern = "*.lua",
+    callback = function()
+        vim.lsp.buf.format({
+            async = true
+        })
+    end,
+})
