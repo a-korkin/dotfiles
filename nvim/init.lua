@@ -1,3 +1,30 @@
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using
+        -- (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {
+          'vim',
+          'require'
+        },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -30,6 +57,9 @@ vim.api.nvim_create_autocmd(
 require("plug")
 
 require("nvim-autopairs").setup()
+
+require("nvim-surround").setup()
+
 
 -- Theme
 require("catppuccin").setup({
@@ -83,8 +113,6 @@ require("catppuccin").setup({
 
 vim.o.background = "dark"
 vim.cmd("colorscheme catppuccin-mocha")
--- vim.o.background = "light"
--- vim.cmd("colorscheme catppuccin-latte")
 
 require("lualine").setup {
     options = {
@@ -104,14 +132,25 @@ require("Comment").setup()
 -- LSP
 local lsp = require("lsp-zero")
 lsp.preset("recommended")
-lsp.setup_servers({
+-- lsp.setup_servers({
+--     "rust_analyzer",
+--     "pyright",
+--     "clangd",
+--     "taplo",
+--     "ts_ls",
+--     "eslint",
+--     "gopls",
+-- })
+vim.lsp.enable({
     "rust_analyzer",
     "pyright",
+    "ruff",
     "clangd",
     "taplo",
     "ts_ls",
     "eslint",
     "gopls",
+    "emmet_language_server",
 })
 -- mason
 require("mason").setup()
@@ -121,9 +160,13 @@ require("mason-lspconfig").setup({
     },
 })
 
-local lspconfig = require("lspconfig");
-lspconfig.emmet_language_server.setup({
-    filetypes = { 'xml' },
+-- local lspconfig = require("lspconfig");
+-- lspconfig.emmet_language_server.setup({
+--     filetypes = { 'xml' },
+-- })
+
+vim.lsp.config("emmet_language_server", {
+    filetypes = { 'xml' }
 })
 
 -- require'nvim-treesitter.configs'.setup {
@@ -181,12 +224,12 @@ lsp.on_attach(function(_, bufnr)
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
     vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
     vim.keymap.set("n", "<Space>e", vim.diagnostic.open_float, bufopts)
-    vim.keymap.set("i", "jj", "<ESC>", {silent = true})
+    -- vim.keymap.set("i", "jj", "<Esc>", { silent = true })
 end)
 
 vim.diagnostic.open_float()
 
-lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+-- lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 
 -- Rust tools
@@ -210,6 +253,14 @@ vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
 
+-- require("telescope").setup({
+--     defaults = {
+--         layout_config = {
+--             vertical = { width = 0.9 },
+--         },
+--     },
+-- })
+
 -- NvimTree
 require("nvim-tree").setup({
     view = {
@@ -221,14 +272,15 @@ require("nvim-tree").setup({
         no_buffer = false,
         custom = {},
         exclude = {},
+        -- exclude = { ".conf", ".config", ".local" },
     },
     git = {
         enable = true,
         ignore = false,
     },
 })
+-- vim.keymap.set("n", "<leader>b", ":NvimTreeToggle<CR>", {})
 vim.keymap.set("n", "<leader>b", ":NvimTreeFindFileToggle<CR>", {})
--- vim.keymap.set("n", "<leader>e", ":NvimTreeFocus<CR>", {})
 
 -- LangMapper
 require('langmapper').automapping({ global = true, buffer = true })
@@ -266,8 +318,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     group = format_sync_grp,
 })
 
+-- ruff
 vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*.rs",
-    command = "RustFmt",
+    pattern = "*.py",
+    callback = function()
+        vim.lsp.buf.format({ async = false })
+    end,
 })
 

@@ -48,3 +48,7 @@ kitty/kitty-themes/*
 kitty/latte.conf
 flameshot/
 lazygit/
+X-Cinnamon-xdg-terminals.list
+xdg-terminals.list
+nvim/plugin/
+kitty/theme.conf
