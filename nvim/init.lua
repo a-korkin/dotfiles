@@ -141,6 +141,17 @@ vim.lsp.enable({
     "gopls",
     "emmet_language_server",
 })
+vim.lsp.config("emmet_language_server", {
+    filetypes = { 'xml' }
+})
+vim.lsp.config("ruff", {
+    init_options = {
+        settings = {
+            organizeImports = true,
+            lint = { enable = true },
+        },
+    },
+})
 -- mason
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -149,9 +160,6 @@ require("mason-lspconfig").setup({
     },
 })
 
-vim.lsp.config("emmet_language_server", {
-    filetypes = { 'xml' }
-})
 
 require("nvim-ts-autotag").setup({
     filetypes = { "html", "xml" },
@@ -283,6 +291,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.py",
     callback = function()
         vim.lsp.buf.format({ async = false })
+        vim.lsp.buf.code_action({
+            context = { only = { "source.organizeImports" } },
+            apply = true,
+        })
     end,
 })
 
