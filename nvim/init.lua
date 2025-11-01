@@ -114,17 +114,24 @@ require("catppuccin").setup({
     },
 })
 
-vim.o.background = "dark"
-vim.cmd("colorscheme catppuccin-mocha")
+-- require("github-theme").setup()
+-- require("midnight").setup()
+require("gruvbox")
 
-require("lualine").setup {
+vim.o.background = "dark"
+-- vim.cmd("colorscheme catppuccin-mocha")
+-- vim.cmd("colorscheme github_dark_tritanopia")
+-- vim.cmd("colorscheme midnight")
+vim.cmd("colorscheme gruvbox")
+
+require("lualine").setup({
     options = {
         icons_enabled = true,
         component_separators = { left = '|', right = '|' },
         section_separators = { left = '', right = '' },
-        theme = "catppuccin", --gruvbox,tokyonight,kanagawa
+        theme = "gruvbox", --catppuccin,gruvbox,tokyonight,kanagawa
     },
-}
+})
 require("Comment").setup()
 
 -- LSP
