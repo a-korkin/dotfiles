@@ -26,7 +26,6 @@ require("packer").startup(function(use)
     use("Mofiqul/vscode.nvim")
     use("dasupradyumna/midnight.nvim")
     use("rebelot/kanagawa.nvim")
-    use { "dasupradyumna/midnight.nvim" }
 
     use({
         "nvim-lualine/lualine.nvim",
