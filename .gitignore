@@ -51,4 +51,5 @@ lazygit/
 X-Cinnamon-xdg-terminals.list
 xdg-terminals.list
 nvim/plugin/
+kitty/themes/
 kitty/theme.conf
