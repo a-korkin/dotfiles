@@ -44,6 +44,7 @@ vim.opt.guicursor = ""
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.clipboard = "unnamedplus"
+vim.opt.fileencodings = { "utf-8", "cp1251" }
 -- vim.opt.signcolumn = "yes:1"
 vim.wo.relativenumber = true
 
@@ -134,7 +135,7 @@ require("lualine").setup({
         theme = "gruvbox", --catppuccin,gruvbox,tokyonight,kanagawa
     },
 })
-require("Comment").setup()
+-- require("Comment").setup()
 
 -- LSP
 local lsp = require("lsp-zero")
@@ -333,5 +334,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         vim.lsp.buf.format({
             async = true
         })
+    end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+    pattern = { "*.js", "*.jsx", "*.ts", "*.tsx" },
+    callback = function()
+        vim.lsp.buf.format({ async = false })
     end,
 })

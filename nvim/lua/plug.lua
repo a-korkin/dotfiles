@@ -33,12 +33,12 @@ require("packer").startup(function(use)
 
     use("nvim-tree/nvim-tree.lua")
 
-    use({
-        "numToStr/Comment.nvim",
-        config = function()
-            require("Comment").setup()
-        end
-    })
+    -- use({
+    --     "numToStr/Comment.nvim",
+    --     config = function()
+    --         require("Comment").setup()
+    --     end
+    -- })
 
     use {
         "VonHeikemen/lsp-zero.nvim",
@@ -94,7 +94,11 @@ require("packer").startup(function(use)
         end,
     })
 
-    use("nvim-treesitter/nvim-treesitter")
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        branch = "main",
+        build = ":TSUpdate"
+    })
     use("windwp/nvim-ts-autotag")
     -- use({"onsails/lspkind-nvim",
     --     config=function()

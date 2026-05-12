@@ -53,3 +53,10 @@ xdg-terminals.list
 nvim/plugin/
 kitty/themes/
 kitty/theme.conf
+BraveSoftware/
+Vial/
+chromium/
+ibus/
+kontur.plugin.logs/
+skbkontur/
+yandex-browser/
