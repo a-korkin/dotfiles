@@ -66,7 +66,8 @@ require("packer").startup(function(use)
     -- Telescope
     use {
         "nvim-telescope/telescope.nvim",
-        tag = "0.1.5",
+        branch = "master",
+        build = ":TSUpdate",
         requires = {
             { "nvim-lua/plenary.nvim" },
             { "nvim-telescope/telescope-live-grep-args.nvim" }
