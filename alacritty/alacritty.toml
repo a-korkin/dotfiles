@@ -1,5 +1,5 @@
 [general]
-import = ["/home/ss/.config/alacritty/themes/themes/catppuccin_mocha.toml"]
+import = ["/home/ss/.config/alacritty/themes/themes/gruvbox_dark.toml"]
 
 [env]
 TERM = "xterm-256color"
@@ -42,6 +42,9 @@ style = "Medium"
 #[shell]
 #args = ["-l", "-c", "tmux"]
 #program = "/bin/zsh"
+
+[window]
+startup_mode = "Maximized"
 
 [window.dimensions]
 columns = 100

@@ -141,6 +141,17 @@ require("lualine").setup({
 -- LSP
 local lsp = require("lsp-zero")
 lsp.preset("recommended")
+vim.lsp.config("ruff", {
+    cmd = { "ruff", "server" },
+    filetypes = { "python" },
+    root_markers = { "pyproject.toml", "ruff.toml", ".ruff.toml", ".git" },
+    init_options = {
+        settings = {
+            organizeImports = true,
+            lint = { enable = true },
+        },
+    },
+})
 vim.lsp.enable({
     "rust_analyzer",
     "pyright",
@@ -155,14 +166,14 @@ vim.lsp.enable({
 vim.lsp.config("emmet_language_server", {
     filetypes = { 'xml' }
 })
-vim.lsp.config("ruff", {
-    init_options = {
-        settings = {
-            organizeImports = true,
-            lint = { enable = true },
-        },
-    },
-})
+-- vim.lsp.config("ruff", {
+--     init_options = {
+--         settings = {
+--             organizeImports = true,
+--             lint = { enable = true },
+--         },
+--     },
+-- })
 -- mason
 require("mason").setup()
 require("mason-lspconfig").setup({
@@ -334,16 +345,29 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     group = format_sync_grp,
 })
 
+
 -- ruff
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*.py",
-    callback = function()
-        vim.lsp.buf.format({ async = false })
-        vim.lsp.buf.code_action({
-            context = { only = { "source.organizeImports" } },
-            apply = true,
-        })
-    end,
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--     pattern = "*.py",
+--     callback = function()
+--         vim.lsp.buf.code_action({
+--             -- context = { only = { "source.organizeImports" } },
+--             ---@diagnostic disable-next-line: assign-type-mismatch
+--             context = { only = { "source.fixAll.ruff" } },
+--             apply = true,
+--         })
+--         vim.lsp.buf.format({ async = false })
+--     end,
+-- })
+require("conform").setup({
+    formatters_by_ft = {
+        python = { "ruff_fix", "ruff_organize_imports", "ruff_format" },
+    },
+    format_on_save = {
+        -- These options will be passed to conform.format()
+        timeout_ms = 500,
+        lsp_format = "fallback",
+    },
 })
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})

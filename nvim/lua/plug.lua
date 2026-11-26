@@ -119,6 +119,7 @@ require("packer").startup(function(use)
 
     -- use({"nvim-mini/mini.surround", branch="stable"})
     use({ "kylechui/nvim-surround", tag = "*" })
+    use( "stevearc/conform.nvim")
 end)
 
 -- the first run will install packer and our plugins
